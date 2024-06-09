@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { SingupComponent } from './singup/singup.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { SignupComponent } from './signup/signup.component';
+import { UserpageComponent } from './userpage/userpage.component';
+import { ErrorpageComponent } from './errorpage/errorpage.component';
 
 export const routes: Routes = [
     {
@@ -16,12 +18,22 @@ export const routes: Routes = [
     }, 
 
     {
-        path: "singin",
-        component: SingupComponent
+        path: "singup",
+        component: SignupComponent
     },
 
     {
         path: "resetpassword",
         component: ResetpasswordComponent
+    },
+
+    {
+        path: "user",
+        component: UserpageComponent
+    }, 
+
+    {
+        path: "**",
+        component: ErrorpageComponent
     }
 ];

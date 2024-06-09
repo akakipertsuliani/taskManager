@@ -1,4 +1,4 @@
-<section class="w-screen h-screen flex justify-center items-center bg-blue-400">
+<section class="w-screen h-screen flex justify-center items-center bg-gradient-to-r from-blue-500 to-teal-500">
     <app-header></app-header>
     <div class="w-full max-w-xs">
         <form [formGroup]="formGroup" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -12,9 +12,11 @@
             <p *ngIf="(formGroup.controls['email'].touched) && formGroup.controls['email'].errors?.['required']" class="text-red-500 text-xs italic">Please enter Email</p>
             <p *ngIf="(formGroup.controls['email'].touched) && formGroup.controls['email'].errors?.['email']" class="text-red-500 text-xs italic">Please enter valid Email</p>
             <p *ngIf="(formGroup.controls['password'].touched) && formGroup.controls['password'].errors?.['required']" class="text-red-500 text-xs italic">Please choose a password.</p>
+            <p *ngIf="isTrue" class="text-red-500 text-xs italic">Email or Password is Incorrect</p>
           </div>
           <div class="flex items-center justify-between">
-            <button (click)="isValid()" class="bg-blue-500 hover:bg-blue-700 transition duration-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">Log In</button>
+            <button *ngIf="!isLoading" (click)="isValid()" class="bg-blue-500 hover:bg-blue-700 transition duration-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">Log In</button>
+            <button *ngIf="isLoading" class="bg-blue-500 text-white font-bold py-2 px-4 rounded" type="button"><mat-spinner diameter="25" class="mat-spinner"></mat-spinner></button>
             <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" routerLink="/resetpassword">Forgot Password?</a>
           </div>
         </form>
