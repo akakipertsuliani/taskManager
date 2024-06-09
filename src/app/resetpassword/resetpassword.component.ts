@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-resetpassword',
@@ -9,7 +10,8 @@ import { HeaderComponent } from '../header/header.component';
   imports: [
     HeaderComponent,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './resetpassword.component.html',
   styleUrl: './resetpassword.component.scss'
