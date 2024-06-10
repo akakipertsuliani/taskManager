@@ -15,4 +15,8 @@ import { RouterLink } from '@angular/router';
 })
 export class HeaderComponent {
     @Input() getAuth: boolean = false;
+
+    logOut() {
+        localStorage.clear();
+    }
 }

@@ -3,8 +3,9 @@ import { HeaderComponent } from '../header/header.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-singup',
@@ -23,8 +24,14 @@ export class SignupComponent {
   formGroup: FormGroup;
   isTrue: boolean = false;
   isLoading: boolean = false;
+  userID: any = localStorage.getItem("id");
+  private signUpSubscription!: Subscription;
 
-  constructor(private http: HttpClient, private route: Router) {
+  constructor(private route: Router, private auth: AuthService) {
+    if (this.userID > 0) {
+      route.navigate(['/user']);
+    }
+
     this.formGroup = new FormGroup({
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
@@ -43,21 +50,24 @@ export class SignupComponent {
       const password = this.formGroup.get('password')?.value;
       this.isLoading = true;
 
-      this.http.post<any[]>('http://localhost:3000/api/auth/signup', {firstName, lastName, email, password}).subscribe({
-        next: () => {
-          alert('OK');
+      this.signUpSubscription = this.auth.signUp(firstName, lastName, email, password).subscribe(data => {
+        if (data) {
           this.route.navigate(["/user"]);
           this.isTrue = false;
           this.isLoading = false;
-          },
-          error: () => {
-            this.isTrue = true;
-            this.isLoading = false;
-        },
-        
-      });
+        } else {
+          this.isTrue = true;
+          this.isLoading = false;
+        }
+      })
     } else {
       this.formGroup.markAllAsTouched();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.signUpSubscription) {
+      this.signUpSubscription.unsubscribe();
     }
   }
 }
