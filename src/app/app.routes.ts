@@ -30,7 +30,7 @@ export const routes: Routes = [
     {
         path: "user",
         component: UserpageComponent
-    }, 
+    },
 
     {
         path: "**",

@@ -24,13 +24,13 @@ export class SignupComponent {
   formGroup: FormGroup;
   isTrue: boolean = false;
   isLoading: boolean = false;
-  userID: any = localStorage.getItem("id");
+  userEmail: any = localStorage.getItem("email");
   private signUpSubscription!: Subscription;
 
   constructor(private route: Router, private auth: AuthService) {
-    if (this.userID > 0) {
-      route.navigate(['/user']);
-    }
+    this.auth.checkEmailForStay(this.userEmail).subscribe(data => {
+      data ? this.route.navigate(['/user']) : false;
+    })
 
     this.formGroup = new FormGroup({
       firstName: new FormControl('', Validators.required),
