@@ -5,6 +5,7 @@ import { ResetpasswordComponent } from './resetpassword/resetpassword.component'
 import { SignupComponent } from './signup/signup.component';
 import { UserpageComponent } from './userpage/userpage.component';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
+import { UsertasksComponent } from './usertasks/usertasks.component';
 
 export const routes: Routes = [
     {
@@ -30,6 +31,11 @@ export const routes: Routes = [
     {
         path: "user",
         component: UserpageComponent
+    },
+
+    {
+        path: "task",
+        component: UsertasksComponent
     },
 
     {
