@@ -4,8 +4,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Subscription } from 'rxjs';
+import { Subscription, throwError, of, Observable } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../service/auth.service';
+import { EmailCheck, SignUpPayload } from '../interface/interface';
+import { CookieService } from '../service/cookie.service';
 
 @Component({
   selector: 'app-singup',
@@ -27,11 +30,7 @@ export class SignupComponent {
   userEmail: any = localStorage.getItem("email");
   private signUpSubscription!: Subscription;
 
-  constructor(private route: Router, private auth: AuthService) {
-    this.auth.checkEmailForStay(this.userEmail).subscribe(data => {
-      data ? this.route.navigate(['/user']) : false;
-    })
-
+  constructor(private route: Router, private auth: AuthService, private cookie: CookieService) {
     this.formGroup = new FormGroup({
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
@@ -44,22 +43,32 @@ export class SignupComponent {
     const isValidForm = this.formGroup.valid;
 
     if (isValidForm) {
-      const firstName = this.formGroup.get('firstName')?.value;
-      const lastName = this.formGroup.get('lastName')?.value;
-      const email = this.formGroup.get('email')?.value;
-      const password = this.formGroup.get('password')?.value;
       this.isLoading = true;
 
-      this.signUpSubscription = this.auth.signUp(firstName, lastName, email, password).subscribe(data => {
-        if (data) {
-          this.route.navigate(["/user"]);
+      this.signUpSubscription = this.auth.checkEmail(this.formGroup.get('email')?.value).pipe(
+        switchMap((res: EmailCheck) => {
+          if (!res.emailExists) {
+            return this.auth.signUp(this.formGroup.value);
+          } else {
+            this.isTrue = true;
+            this.isLoading = false;
+            return throwError('Email already exists');
+          }
+        }),
+        tap((res: SignUpPayload) => {
+          localStorage.setItem("user", JSON.stringify(res.user));
+          this.cookie.setCookie("accessToken", res.token.accessToken, 1);
+          this.cookie.setCookie("refreshToken", res.token.refreshToken, 1);
+          this.route.navigate(['/']);
           this.isTrue = false;
           this.isLoading = false;
-        } else {
+        }),
+        catchError((error) => {
           this.isTrue = true;
           this.isLoading = false;
-        }
-      })
+          return "";
+        })
+      ).subscribe();
     } else {
       this.formGroup.markAllAsTouched();
     }

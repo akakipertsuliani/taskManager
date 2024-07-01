@@ -1,6 +1,8 @@
-<app-header></app-header>
+<app-userpage *ngIf="authGurard"></app-userpage>
 
-<section class="w-screen h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-teal-500">
+<app-header *ngIf="!authGurard"></app-header>
+
+<section *ngIf="!authGurard" class="w-screen h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-teal-500">
     <div class="flex flex-col md:flex-row items-center justify-between w-4/5 max-w-6xl mx-auto p-8 md:p-16 bg-gradient-to-r from-white to-gray-100 rounded-xl shadow-2xl">
         <div class="text-center md:text-left mb-8 md:mb-0 md:w-1/2">
             <h1 class="text-3xl md:text-5xl font-extrabold text-[#312e81] mb-4">TaskM</h1>

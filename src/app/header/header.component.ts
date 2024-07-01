@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'app-header',
@@ -16,11 +16,11 @@ import { RouterLink } from '@angular/router';
 export class HeaderComponent {
     @Input() getAuth: boolean = false;
     @Input() navElement1: string[] = ['Home', '/'];
-    @Input() navElement2: string[] = ['Task', '/task'];
-    @Input() navElement3: string[] = ['News', '/news'];
-    @Input() navElement4: string[] = ['Support', '/support'];
+    @Input() navElement2: string[] = ['Project', '/task'];
+    @Input() navElement3: string[] = ['Support', '/support'];
+    authService = inject(AuthService);
 
     logOut() {
-        localStorage.clear();
+        this.authService.logOut();
     }
 }

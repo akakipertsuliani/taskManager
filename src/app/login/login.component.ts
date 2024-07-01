@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../service/auth.service';
-import { Subscription } from 'rxjs';
+import { Subscription, catchError, tap, throwError } from 'rxjs';
+import { LogInPayload } from '../interface/interface';
+import { CookieService } from '../service/cookie.service';
 
 @Component({
     selector: 'app-login',
@@ -27,11 +29,7 @@ export class LoginComponent {
     userEmail: any = localStorage.getItem("email");
     private loginSubscription!: Subscription;
 
-    constructor(private route: Router, private auth: AuthService) {
-        this.auth.checkEmailForStay(this.userEmail).subscribe(data => {
-            data ? this.route.navigate(['/user']) : false;
-        });
-        
+    constructor(private route: Router, private auth: AuthService, private cookie: CookieService) {
         this.formGroup = new FormGroup({
             email: new FormControl('', [Validators.required, Validators.email]),
             password: new FormControl('', Validators.required),
@@ -40,29 +38,32 @@ export class LoginComponent {
 
     isValid() {
         const isValidForm = this.formGroup.valid;
-        const email = this.formGroup.get('email')?.value;
-        const password = this.formGroup.get('password')?.value;
 
         if (isValidForm) {
             this.isLoading = true;
-            this.loginSubscription = this.auth.login(email, password).subscribe((data) => {
-                if (data) {
-                    this.route.navigate(['/user']);
+            this.loginSubscription = this.auth.login(this.formGroup.value).pipe(
+                tap((res: LogInPayload) => {
+                    localStorage.setItem("user", JSON.stringify(res.user));
+                    this.cookie.setCookie("accessToken", res.token.accessToken, 1);
+                    this.cookie.setCookie("refreshToken", res.token.refreshToken, 1);
+                    this.route.navigate(['/']);
                     this.isTrue = false;
                     this.isLoading = false;
-                } else {
-                    this.isLoading = false;
+                }),
+                catchError(() => {
                     this.isTrue = true;
-                }
-            });
+                    this.isLoading = false;
+                    return '';
+                })
+            ).subscribe();
         } else {
             this.formGroup.markAllAsTouched();
         }
     }
 
     ngOnDestroy(): void {
-      if (this.loginSubscription) {
-        this.loginSubscription.unsubscribe();
-      }
+        if (this.loginSubscription) {
+          this.loginSubscription.unsubscribe();
+        }
     }
 }

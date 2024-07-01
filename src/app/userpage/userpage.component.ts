@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
-import { Router } from '@angular/router';
+import { AuthService } from '../service/auth.service';
+import { Subscription } from 'rxjs';
+import { CookieService } from '../service/cookie.service';
 
 @Component({
   selector: 'app-userpage',
@@ -9,12 +11,4 @@ import { Router } from '@angular/router';
   templateUrl: './userpage.component.html',
   styleUrl: './userpage.component.scss'
 })
-export class UserpageComponent {
-  userID: any = localStorage.getItem("id");
-
-  constructor(private route: Router) {
-    if (!this.userID) {
-      route.navigate(['/']);
-    }
-  }
-}
+export class UserpageComponent {}
