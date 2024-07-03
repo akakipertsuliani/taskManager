@@ -1,0 +1,16 @@
+<app-userpage *ngIf="authGurard"></app-userpage>
+
+<app-header *ngIf="!authGurard"></app-header>
+
+<section *ngIf="!authGurard" class="w-screen h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-teal-500">
+    <div class="flex flex-col md:flex-row items-center justify-between w-4/5 max-w-6xl mx-auto p-8 md:p-16 bg-gradient-to-r from-white to-gray-100 rounded-xl shadow-2xl">
+        <div class="text-center md:text-left mb-8 md:mb-0 md:w-1/2">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-[#312e81] mb-4">TaskM</h1>
+            <p class="text-lg md:text-xl text-gray-700 mb-6">Bringing all your tasks, teammates, and tools together in one place for seamless collaboration.</p>
+            <button routerLink="/signup" type="button" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">Get started</button>
+        </div>
+        <div class="md:w-1/2 flex justify-center md:justify-end">
+            <img src="../../assets/homepageImage.jpg" alt="Placeholder Image" class="rounded-lg shadow-lg">
+        </div>
+    </div>
+</section>

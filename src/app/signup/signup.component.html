@@ -1,0 +1,37 @@
+<app-header></app-header>
+
+<section class="w-screen h-screen flex justify-center items-center bg-gradient-to-r from-blue-500 to-teal-500 bg-opacity-75">
+  <div class="w-full max-w-md">
+      <form [formGroup]="formGroup" class="bg-white bg-opacity-90 shadow-xl rounded-lg px-8 pt-10 pb-10">
+          <h2 class="text-2xl font-bold text-center text-[#312e81] mb-6">Create Your Account</h2>
+          <div class="mb-4">
+              <label class="block text-gray-800 text-sm font-bold mb-2" for="firstName">First Name</label>
+              <input class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" formControlName="firstName" [ngClass]="{ 'border-red-500': formGroup.get('firstName')!.touched && formGroup.get('firstName')!.invalid }" id="firstName" type="text" placeholder="First name">
+              <p *ngIf="formGroup.get('firstName')!.touched && formGroup.get('firstName')!.invalid" class="text-red-500 text-xs italic mt-2">Please enter your first name</p>
+          </div>
+          <div class="mb-4">
+              <label class="block text-gray-800 text-sm font-bold mb-2" for="lastName">Last Name</label>
+              <input class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" formControlName="lastName" [ngClass]="{ 'border-red-500': formGroup.get('lastName')!.touched && formGroup.get('lastName')!.invalid }" id="lastName" type="text" placeholder="Last name">
+              <p *ngIf="formGroup.get('lastName')!.touched && formGroup.get('lastName')!.invalid" class="text-red-500 text-xs italic mt-2">Please enter your last name</p>
+          </div>
+          <div class="mb-4">
+              <label class="block text-gray-800 text-sm font-bold mb-2" for="email">Email</label>
+              <input class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" formControlName="email" [ngClass]="{ 'border-red-500': formGroup.get('email')!.touched && formGroup.get('email')!.invalid }" id="email" type="email" placeholder="Email">
+              <p *ngIf="formGroup.get('email')!.touched && formGroup.get('email')!.invalid" class="text-red-500 text-xs italic mt-2">Please enter a valid email</p>
+          </div>
+          <div class="mb-6">
+              <label class="block text-gray-800 text-sm font-bold mb-2" for="password">Password</label>
+              <input class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-800 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" formControlName="password" [ngClass]="{ 'border-red-500': formGroup.get('password')!.touched && formGroup.get('password')!.invalid }" id="password" type="password" placeholder="******************">
+              <p *ngIf="formGroup.get('password')!.touched && formGroup.get('password')!.invalid" class="text-red-500 text-xs italic mt-2">Please choose a password</p>
+              <p *ngIf="isTrue" class="text-red-500 text-xs italic mt-2">Email already in use</p>
+          </div>
+          <div class="flex items-center justify-between mb-6">
+              <button (click)="isValid()" *ngIf="!isLoading" class="w-full bg-primary-700 hover:bg-primary-800 transition duration-300 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="button">Sign Up</button>
+              <button *ngIf="isLoading" class="w-full flex justify-center bg-primary-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none" type="button"><mat-spinner diameter="25" class="mat-spinner"></mat-spinner></button>
+          </div>
+          <div class="text-center">
+              <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" routerLink="/login">Already have an account?</a>
+          </div>
+      </form>
+  </div>
+</section>
